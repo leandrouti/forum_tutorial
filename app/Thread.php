@@ -14,7 +14,7 @@ class Thread extends Model
     }
 
     public function replies(){
-        return $this->hasMany('App\Reply');
+        return $this->hasMany('App\Reply')->orderBy('created_at', 'desc');
     }
 
     public function owner()
