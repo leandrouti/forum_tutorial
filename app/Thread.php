@@ -10,4 +10,13 @@ class Thread extends Model
     {
         return '/threads/' . $this->id;
     }
+
+    public function replies(){
+        return $this->hasMany('App\Reply');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }
