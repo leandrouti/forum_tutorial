@@ -28,7 +28,7 @@ class FeatureTest extends TestCase
     /** @test */
     public function a_user_can_view_single_thread()
     {
-        $response = $this->get('/threads/' . $this->thread->id)
+        $response = $this->get($this->thread->path())
                     ->assertSee($this->thread->title);
     }
 
@@ -36,7 +36,7 @@ class FeatureTest extends TestCase
     public function a_user_can_read_replies_associated_with_a_thread(){
         $reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
 
-        $response = $this->get('/threads/' . $this->thread->id)
+        $response = $this->get($this->thread->path())
                     ->assertSee($reply->body);
     }
 
