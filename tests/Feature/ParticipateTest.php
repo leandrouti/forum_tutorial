@@ -12,6 +12,7 @@ class ParticipateTest extends TestCase
     /** @test */
     public function unaunthenticated_users_may_not_reply(){
         $this->expectException('Illuminate\Auth\AuthenticationException');
+        $this->withoutExceptionHandling();
         $this->post('/threads/1/replies', []);
     }
 
