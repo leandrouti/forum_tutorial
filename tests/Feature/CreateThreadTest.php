@@ -13,13 +13,13 @@ class CreateThreadTest extends TestCase
     public function guests_may_not_create_threads(){
         $this->expectException('Illuminate\Auth\AuthenticationException');
         $this->withoutExceptionHandling();
-        $thread = factory('App\Thread')->make();
-        $this->post('/threads', $thread->toArray());
-    }
 
-    /** @test */
-    public function guest_cannot_see_the_thread_create_page(){
-        $this->get('/threads/create')->assertRedirect('/login');
+        $this->get('/threads/create')
+                ->assertRedirect('/login');
+
+        $this->post('/threads')
+                ->assertRedirect('/login');
+        
     }
 
     /** @test */
@@ -29,10 +29,55 @@ class CreateThreadTest extends TestCase
 
         $thread = factory('App\Thread')->make();
 
-        $this->post('/threads', $thread->toArray());
+        $response = $this->post('/threads', $thread->toArray());
 
-        $this->get($thread->path())
+        $this->get($response->headers->get('Location'))
             ->assertSee($thread->title)
             ->assertSee($thread->body);
+    }
+
+    /** @test */
+    public function a_thread_requires_title()
+    {
+        $this->actingAs($user = factory('App\User')->create());
+
+        $thread = factory('App\Thread')->create();
+
+        $thread->title = null;
+
+        $this->post('/threads', $thread->toArray())
+                ->assertSessionHasErrors('title');
+    }
+
+    /** @test */
+    public function a_thread_requires_body()
+    {
+        $this->actingAs($user = factory('App\User')->create());
+        
+        $thread = factory('App\Thread')->create();
+
+        $thread->body = null;
+
+        $this->post('/threads', $thread->toArray())
+                ->assertSessionHasErrors('body');
+    }
+
+    /** @test */
+    public function a_thread_requires_channel()
+    {
+        $this->actingAs($user = factory('App\User')->create());
+        
+        $channels = factory('App\Channel', 2)->create();
+
+        $thread = factory('App\Thread')->create();
+
+        $thread->channel_id = null;
+        $this->post('/threads', $thread->toArray())
+                ->assertSessionHasErrors('channel_id');
+
+        //Checks valid channel
+        $thread->channel_id = 999;
+        $this->post('/threads', $thread->toArray())
+                ->assertSessionHasErrors('channel_id');
     }
 }

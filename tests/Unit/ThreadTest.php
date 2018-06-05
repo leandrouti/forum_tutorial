@@ -28,7 +28,8 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
-    public function a_thread_can_add_a_reply(){
+    public function a_thread_can_add_a_reply()
+    {
         $this->thread->addReply([
             'body' => 'Foobar',
             'user_id' => 1
@@ -37,4 +38,16 @@ class ThreadTest extends TestCase
         $this->assertCount(1, $this->thread->replies);
     }
 
+    /** @test */
+    public function a_thread_belongs_to_a_channel()
+    {
+        $this->assertInstanceOf('App\Channel', $this->thread->channel);
+    }
+
+    /** @test */
+    public function a_thread_can_make_a_string_path()
+    {
+        $thread = factory('App\Thread')->make();
+        $this->assertEquals("/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
+    }
 }
