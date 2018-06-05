@@ -25,9 +25,19 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
 
-                <a class="navbar-brand" href="{{ url('/threads') }}">
-                    All Threads
-                </a>
+                <li class="navbar dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        Browse <span class="caret"></span>
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ url('/threads') }}">All Threads</a>
+                        @if(Auth()->check())
+                            <a class="dropdown-item" href="/threads?by= {{ Auth()->user()->name }}">My Threads</a>
+                        @endif
+
+                    </div>
+                </li>
 
                 
                 <li class="navbar dropdown">

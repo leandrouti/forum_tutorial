@@ -48,7 +48,19 @@ class FeatureTest extends TestCase
         $this->get('threads/' . $channel->slug)
                 ->assertSee($threadInChannel->title)
                 ->assertDontSee($threadNotInChannel->title);
+    }
 
+    /** @test */
+    public function a_user_can_filter_threads_by_any_username()
+    {
+        $this->actingAs($user = factory('App\User')->create(['name' => 'JohnDoe']));
+
+        $threadByJohn = factory('App\Thread')->create(['user_id' => Auth()->id()]);
+        $threadNotByJohn = factory('App\Thread')->create();
+
+        $this->get('threads?by=JohnDoe')
+                ->assertSee($threadByJohn->title)
+                ->assertDontSee($threadNotByJohn);
     }
 
 }
