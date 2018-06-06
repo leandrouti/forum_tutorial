@@ -22,6 +22,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('threads/{channel}/{thread}/replies', 'RepliesController@store');
 
+Route::post('replies/{reply}/favorite', 'FavoritesController@store');
+
 Route::get('threads', 'ThreadsController@index');
 
 Route::get('threads/create', 'ThreadsController@create');
