@@ -63,4 +63,22 @@ class FeatureTest extends TestCase
                 ->assertDontSee($threadNotByJohn);
     }
 
+    /** @test */
+    public function a_user_can_filter_threads_by_popularity()
+    {
+        $this->actingAs($user = factory('App\User')->create(['name' => 'JohnDoe']));
+        
+        $threadWithTwoReplies = factory('App\Thread')->create();
+        factory('App\Reply', 2)->create(['thread_id' => $threadWithTwoReplies->id]);
+
+        $threadWithThreeReplies = factory('App\Thread')->create();
+        $replies = factory('App\Reply', 3)->create(['thread_id' => $threadWithThreeReplies->id]);
+
+        $threadWithNoReplies = $this->thread;
+
+        $response = $this->getJson('threads?popular=1')->json();
+
+        $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
+    }
+
 }

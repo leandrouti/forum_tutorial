@@ -19,12 +19,15 @@ class ThreadsController extends Controller
         
         if($channel){
             $threads = $channel->threads()->latest();
-
         }else{
             $threads = Thread::latest();
         }
 
         $threads = $threads->filter($filters)->get();
+
+        if(request()->wantsJson()){
+            return $threads;
+        }
 
         
         return view('threads.index')->with('threads', $threads);
