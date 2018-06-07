@@ -17,11 +17,12 @@
              @foreach($replies as $reply)
                 <div class="card my-2">
                     <div class="card-header">
-                        <div class="flex">
-                            {{$reply->owner->name}} said {{ $reply->created_at->diffForHumans() }}
-                        </div>
+                        
 
                         <div class="level">
+                            <div class="flex">
+                                <a href="{{"/profiles/{$reply->owner->name}"}}">{{$reply->owner->name}}</a> said {{ $reply->created_at->diffForHumans() }}
+                            </div>
                             <form action="/replies/{{ $reply->id }}/favorite" method="post">
                                 {{ csrf_field() }}
                                 <button type="submit" class="btn btn-default"  {{ $reply->isFavorited() ? 'disabled' : '' }}>Favorite {{ $reply->favorites_count }}</button>
