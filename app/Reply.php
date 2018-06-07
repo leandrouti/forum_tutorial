@@ -7,7 +7,7 @@ use App\Favoritable;
 
 class Reply extends Model
 {
-    use Favoritable;
+    use Favoritable, recordActivity;
     
     protected $guarded = [];
     protected $with = ['owner', 'favorites'];
