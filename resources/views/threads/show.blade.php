@@ -5,7 +5,20 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header"><h4>{{ $thread->title }}</h4></div>
+                <div class="card-header">
+                    <div class="level">
+                        <h4 class="flex">{{ $thread->title }}</h4>
+
+                        @can('delete', $thread)
+                            <form action="{{ $thread->path() }}" method="post">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        @endcan
+                    </div>
+                    
+                </div>
 
                 <div class="card-body">
                     <article>
@@ -17,11 +30,9 @@
              @foreach($replies as $reply)
                 <div class="card my-2">
                     <div class="card-header">
-                        
-
                         <div class="level">
                             <div class="flex">
-                                <a href="{{"/profiles/{$reply->owner->name}"}}">{{$reply->owner->name}}</a> said {{ $reply->created_at->diffForHumans() }}
+                                <a href="{{ route('profile', $reply->owner->name) }}">{{$reply->owner->name}}</a> said {{ $reply->created_at->diffForHumans() }}
                             </div>
                             <form action="/replies/{{ $reply->id }}/favorite" method="post">
                                 {{ csrf_field() }}

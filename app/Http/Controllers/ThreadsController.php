@@ -62,4 +62,18 @@ class ThreadsController extends Controller
     public function create(){
         return view('threads.create');
     }
+
+    public function destroy($channel_slug, Thread $thread)
+    {
+        $this->authorize('delete', $thread);
+        
+        $thread->delete();
+
+        if(request()->wantsJson()){
+            return response([], 204);
+        }
+
+        return redirect('/threads');
+        
+    }
 }
