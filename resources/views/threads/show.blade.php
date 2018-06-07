@@ -24,7 +24,7 @@
                         <div class="level">
                             <form action="/replies/{{ $reply->id }}/favorite" method="post">
                                 {{ csrf_field() }}
-                                <button type="submit" class="btn btn-default"  {{ $reply->isFavorited() ? 'disabled' : '' }}>Favorite {{ $reply->favorites()->count() }}</button>
+                                <button type="submit" class="btn btn-default"  {{ $reply->isFavorited() ? 'disabled' : '' }}>Favorite {{ $reply->favorites_count }}</button>
                             </form>
                         
                         </div>
